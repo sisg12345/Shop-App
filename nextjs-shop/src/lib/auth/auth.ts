@@ -1,5 +1,3 @@
-import 'server-only'
-
 import NextAuth from 'next-auth'
 import { authConfig } from '@/auth.config'
 import yup from '@/lib/yup'
@@ -7,7 +5,6 @@ import Credentials from 'next-auth/providers/credentials'
 import prisma from '../prisma'
 import bcrypt from 'bcryptjs'
 import { signinFormSchema } from '../services/auth/validations'
-import { DatabaseError } from '@/server/shared/Errors/DatabaseError'
 
 type FindUser = { id: string; password: string } | null
 
@@ -18,22 +15,18 @@ type FindUser = { id: string; password: string } | null
  * @returns ユーザー情報 - メールアドレス
  */
 async function findUser(email: string): Promise<FindUser> {
-  try {
-    // ユーザー情報取得
-    const user = await prisma.user.findUnique({
-      select: { id: true, password: true },
-      where: { email },
-    })
+  // ユーザー情報取得
+  const user = await prisma.user.findUnique({
+    select: { id: true, password: true },
+    where: { email },
+  })
 
-    return user as FindUser
-  } catch (error) {
-    // データベースエラー
-    throw new DatabaseError()
-  }
+  return user as FindUser
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
+  secret: process.env.AUTH_SECRET,
   callbacks: {
     /**
      * セッション
@@ -88,7 +81,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         } catch (error: unknown) {
           // バリデーションエラー、データベースエラー
-          if (error instanceof yup.ValidationError || error instanceof DatabaseError) {
+          if (error instanceof yup.ValidationError) {
             return null
           }
 

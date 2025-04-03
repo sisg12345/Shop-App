@@ -1,6 +1,6 @@
 import 'server-only'
 
-import type { ProductCategory, ProductCondition } from '@/types'
+import type { ProductCategory, ProductCondition, User } from '@/types'
 
 /**
  * 商品エンティティ
@@ -22,6 +22,14 @@ export class ProductEntity {
     /** 画像URL */
     public imageUrl: string,
     /** 所有者ID */
-    public owner_id: number,
+    public ownerId: number,
+    /** 作成ユーザー */
+    public createUser: User['id'],
+    /** 作成日付 */
+    public createDate: Date,
+    /** 更新ユーザー */
+    public updateUser: User['id'],
+    /** 更新日付 */
+    public updateData: Date,
   ) {}
 }

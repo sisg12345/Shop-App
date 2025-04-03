@@ -39,7 +39,7 @@ export default function UserPage({ params }: UserPageProps) {
   // 出品者情報が存在すれば出品した商品一覧を取得
   if (user) {
     // 商品一覧を取得
-    products = use(searchProducts<Product[]>({ userId: id }))
+    products = use(searchProducts<Product[] | []>({ userId: id }))
   }
 
   return (

@@ -1,3 +1,5 @@
+'use client'
+
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, useForm } from 'react-hook-form'
 import Button from '@/components/atoms/Buttons/Button'
@@ -11,16 +13,20 @@ import { PRODUCT_CATEGORY_NAME, PRODUCT_CONDITION } from '@/constants'
 import type { ProductFormData } from '@/app/api/sell/action'
 import { productFormSchema } from '@/lib/services/products/validations'
 import type { ResponseResult } from '@/types'
+import { startTransition, useActionState, useEffect } from 'react'
+import { useGlobalSpinnerActionsContext } from '@/contexts/GlobalSpinnerActionsContext'
 
 interface ProductFormProps {
   /** サーバーアクション - 出品ボタンをクリックした時のイベントハンドラー */
-  onProductSave: (data: ProductFormData) => Promise<ResponseResult>
+  onSave: (prevState: unknown, data: ProductFormData) => Promise<ResponseResult | void>
 }
 
 /**
- * 商品投稿フォーム
+ * 商品出品フォーム
  */
-export default function ProductForm({ onProductSave }: ProductFormProps) {
+export default function ProductForm({ onSave }: ProductFormProps) {
+  // ローディングスピナーアクションコンテキストのフック
+  const setGlobalSpinner = useGlobalSpinnerActionsContext()
   // formの初期化
   const {
     register,
@@ -39,9 +45,33 @@ export default function ProductForm({ onProductSave }: ProductFormProps) {
     // yupを使用するように設定
     resolver: yupResolver(productFormSchema),
   })
+  // サーバーアクションの状態フック
+  const [error, formAction, isPending] = useActionState(onSave, undefined)
+
+  /**
+   * 送信のイベントハンドラー
+   *
+   * @param data フォームのデータ
+   */
+  const onSubmit = (data: ProductFormData) => {
+    // 受けっとったサインインイベント(サーバーアクション)を実行
+    startTransition(() => {
+      formAction(data)
+    })
+  }
+
+  useEffect(() => {
+    // // ローディングスピナー表示 / 非表示
+    setGlobalSpinner(isPending)
+
+    return () => {
+      // ローディングスピナー非表示
+      setGlobalSpinner(false)
+    }
+  }, [isPending])
 
   return (
-    <form onSubmit={handleSubmit(onProductSave)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {/* 商品画像 */}
       <Box $marginBottom={1}>
         <Text as="label" $variant="mediumLarge" $fontWeight="bold">
@@ -172,6 +202,14 @@ export default function ProductForm({ onProductSave }: ProductFormProps) {
           {errors.price?.message}
         </Text>
       </Box>
+      {/* エラー */}
+      {!!error && (
+        <Box $marginBottom={1}>
+          <Text $variant="small" $color="danger">
+            {error.message}
+          </Text>
+        </Box>
+      )}
       {/* 出品登録 */}
       <Button type="submit" $width="100%">
         出品

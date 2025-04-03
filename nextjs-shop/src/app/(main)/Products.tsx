@@ -9,11 +9,11 @@ import type { Product } from '@/types'
 
 type ProductsProps = {
   /** 服一覧 */
-  clothesProducts: Product[]
+  clothesProducts: Product[] | []
   /** 本一覧 */
-  bookProducts: Product[]
+  bookProducts: Product[] | []
   /** 靴一覧 */
-  shoesProducts: Product[]
+  shoesProducts: Product[] | []
 }
 
 /**

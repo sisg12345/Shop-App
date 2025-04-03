@@ -1,24 +1,26 @@
 import 'server-only'
 
-import { ProductService } from '@/server/domain/services/ProductService'
+import { ProductService } from '@/server/domain/services/productService'
 import { Command } from './command'
-import { FileUploadError } from '@/server/shared/Errors/FIleUpLoadError'
-import { ResponseResult } from '@/types'
+import { FileUploadError } from '@/server/shared/errors/fIleUpLoadError'
+import type { ResponseResult } from '@/types'
 import { productFormSchema } from '@/lib/services/products/validations'
-import { ErrorMessages, generateErrors } from '@/utils/yupUtil'
+import { generateErrors } from '@/utils/yupUtil'
+import type { ErrorMessages } from '@/utils/yupUtil'
 import yup from '@/lib/yup'
-import { ProductDto } from '@/server/domain/dtos/ProductDto'
+import { CreateProductDto } from '@/server/domain/dtos/createProductDto'
 import { MESSAGE } from '@/constants'
-import { ProductRepository } from '@/server/infrastructure/repositories/product/ProductRepository'
+import { ProductRepository } from '@/server/infrastructure/repositories/product/productRepository'
 
-export class Create {
+export class CreateProductHandler {
   constructor(
-    private command: Command,
-    private productService: ProductService,
-    private productRepository: ProductRepository,
+    private readonly command: Command,
+    private readonly productService: ProductService,
+    private readonly productRepository: ProductRepository,
   ) {}
 
   public async handle(): Promise<ResponseResult> {
+    // 処理結果
     let success = true
     // メッセージ
     let message
@@ -29,10 +31,10 @@ export class Create {
       // バリデーション実行
       this.validate(this.command)
 
-      // 商品画像アップロードアップロード
+      // 商品画像アップロード
       const imageUrl = await this.productService.fileUpload(this.command.images[0].file)
       // 商品DTO
-      const productDto = new ProductDto(
+      const createProductDto = new CreateProductDto(
         undefined, // 保存処理で自動裁判なので値はundefinedでOK
         this.command.category,
         this.command.description,
@@ -44,7 +46,7 @@ export class Create {
       )
 
       // 保存
-      await this.productRepository.save(productDto as Required<ProductDto>)
+      await this.productRepository.save(createProductDto as Required<CreateProductDto>)
     } catch (error: unknown) {
       // 処理失敗
       success = false

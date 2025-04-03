@@ -3,29 +3,31 @@
 import { MESSAGE } from '@/constants'
 import { signIn } from '@/lib/auth/auth'
 import { AuthError } from 'next-auth'
-import { redirect } from 'next/dist/server/api-utils'
 import { headers } from 'next/headers'
 
-// サインインフォームのデータ
+// サインインフォーム
 export type SigninFormData = {
+  /** メールアドレス */
   email: string
+  /** パスワード */
   password: string
 }
 
 /**
  * サインイン認証
  *
- * @param prevState 古い状態
+ * @param prevState 状態
  * @param formData フォームデータ
- * @returns 処理失敗: エラー返却, 処理成功: ホーム画面に遷移
+ * @returns 処理失敗: エラー返却, 処理成功: ホーム画面に遷移 (Auth.jsにて制御)
  */
-export async function authenticate(prevState: unknown, formData: SigninFormData) {
+export async function signin(prevState: unknown, formData: SigninFormData): Promise<string | void> {
   // 実行時のURLは'referer'ヘッダーに格納されている
   const referer = (await headers()).get('referer')
   // URLを解析してクエリパラメータを取得
   if (!referer) {
     throw new Error('Referer header is missing')
   }
+  // URLオブジェクトを生成
   const url = new URL(referer)
   // クエリパラメーターを取得
   const queryParams = Object.fromEntries(url.searchParams.entries())

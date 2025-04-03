@@ -1,7 +1,7 @@
 /**
  * 通信レスポンス
  */
-export type ResponseResult = {
+export type ResponseResult<T = {}> = {
   /** 成功フラグ */
   success: boolean
   /** メッセージ */
@@ -14,4 +14,11 @@ export type ResponseResult = {
   }
   /** ステータスコード */
   status?: number
+  /** 取得データ */
+  data?: T
 }
+
+/**
+ * HTTPメソッド
+ */
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'

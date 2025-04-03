@@ -9,7 +9,7 @@
  * @throws レスポンスが失敗した場合にエラーメッセージを含む例外を投げる
  */
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const fetcher = async (resource: RequestInfo, init?: RequestInit): Promise<any> => {
+export const fetcher = async <T>(resource: RequestInfo, init?: RequestInit): Promise<T> => {
   // リソースに対してHTTPリクエストを行う
   const response = await fetch(resource, init)
   console.log('fetcher...', resource)

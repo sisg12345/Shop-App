@@ -16,7 +16,6 @@ const ImagePreviewContainer = styled.div`
 
 const InputImagesContainer = styled(Flex)``
 
-// TODO
 export type FileData = {
   id?: string
   src?: string
@@ -51,7 +50,6 @@ export default function InputImages({
   maximumNumber,
   $width,
   $height = 200,
-
   $hasError,
   onChange,
 }: InputImagesProps) {

@@ -12,7 +12,7 @@ datasource db {
 
 // 商品
 model product {
-    // ID
+  // ID
   id            Int    @id  @default(autoincrement())
   // カテゴリー
   category      String
@@ -28,9 +28,9 @@ model product {
   condition     String
   // 所有者ID
   ownerId       Int
-  // 作成日付
-  createUser    Int
   // 作成ユーザー
+  createUser    Int
+  // 作成日付
   createDate    DateTime  @default(now())
   // 更新日付
   updateUser    Int
@@ -53,10 +53,10 @@ model user {
   // 説明
   description       String
   // プロフィール画像のURL
-  imageProfileUrl   String
-  // 作成日付
-  createUser        Int
+  profileImageUrl   String
   // 作成ユーザー
+  createUser        Int
+  // 作成日付
   createDate        DateTime  @default(now())
   // 更新日付
   updateUser        Int

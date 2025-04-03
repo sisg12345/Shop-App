@@ -10,7 +10,16 @@ export default function Layout({ children }: PropsWithChildren) {
       $paddingLeft={2}
       $paddingRight={2}
     >
-      {children}
+      <Flex
+        $flexDirection="column"
+        $justifyContent="center"
+        $alignItems="center"
+        $paddingTop={2}
+        $paddingBottom={2}
+        $width="400px"
+      >
+        {children}
+      </Flex>
     </Flex>
   )
 }

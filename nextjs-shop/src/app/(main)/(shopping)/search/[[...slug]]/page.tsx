@@ -7,7 +7,7 @@ import ProductList from './ProductList'
 import Box from '@/components/layouts/Box'
 import Flex from '@/components/layouts/Flex'
 import { searchProducts } from '@/lib/services/products/search-products'
-import type { Product, ProductCategory, ProductCondition } from '@/types'
+import type { Product, ProductCategory, ProductCondition, ResponseResult } from '@/types'
 
 type SearchPageProps = {
   /** パラメーター */
@@ -46,9 +46,14 @@ export default function SearchPage({ params, searchParams }: SearchPageProps) {
      */
     const fetchData = async () => {
       // 商品一覧取得
-      const products = await searchProducts<Product[]>({ category, conditions, limit: 20, page: 1 })
+      const products = await searchProducts<ResponseResult<Product[] | []>>({
+        category,
+        conditions,
+        limit: 20,
+        page: 1,
+      })
       // 商品一覧の状態をセット
-      setProducts(products)
+      setProducts(products.data ?? [])
     }
 
     // データ取得処理十国

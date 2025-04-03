@@ -13,7 +13,7 @@ import { useGlobalSpinnerActionsContext } from '@/contexts/GlobalSpinnerActionsC
 
 interface SigninFormProps {
   // サインインボタンクリックした時のイベントハンドラー
-  onSignin: (prevState: unknown, formData: SigninFormData) => Promise<string | undefined>
+  onSignin: (prevState: unknown, formData: SigninFormData) => Promise<string | void>
 }
 
 /**
@@ -51,7 +51,7 @@ export default function SigninForm({ onSignin }: SigninFormProps) {
   }
 
   useEffect(() => {
-    // // ローディングスピナー表示 / 非表示
+    // ローディングスピナー表示 / 非表示
     setGlobalSpinner(isPending)
 
     return () => {
@@ -79,7 +79,7 @@ export default function SigninForm({ onSignin }: SigninFormProps) {
       {/* ユーザーパスワードの入力 */}
       <Box $marginBottom={1}>
         <Input
-          type="text"
+          type="password"
           placeholder="パスワード"
           $hasError={!!errors.password}
           {...register('password')}
@@ -89,12 +89,15 @@ export default function SigninForm({ onSignin }: SigninFormProps) {
             {errors.password?.message}
           </Text>
         </Box>
-        <Box $marginTop={1}>
+      </Box>
+      {/* エラー */}
+      {!!error && (
+        <Box $marginBottom={1}>
           <Text $variant="small" $color="danger">
             {error}
           </Text>
         </Box>
-      </Box>
+      )}
       {/* サインイン */}
       <Button type="submit" $width="100%">
         サインイン

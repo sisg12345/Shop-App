@@ -35,8 +35,8 @@ export default function Breadcrumb({ breadcrumbsInfo }: BreadcrumbProps) {
   return (
     <Box as="nav">
       <BreadcrumbRoot as="ul">
-        {breadcrumbsInfo.map(({ href, label }) => (
-          <BreadcrumbItem key={label}>
+        {breadcrumbsInfo.map(({ href, label }, index) => (
+          <BreadcrumbItem key={index}>
             <Link href={href}>{label}</Link>
           </BreadcrumbItem>
         ))}

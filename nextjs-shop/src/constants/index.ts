@@ -2,6 +2,8 @@ import type { ProductCategory, ProductCondition } from '@/types'
 
 // 画面名
 export const PAGE_NAME = {
+  signin: 'サインイン',
+  signup: '会員登録',
   top: 'トップ',
   search: '検索',
 } as const
@@ -36,5 +38,11 @@ export const MESSAGE = {
     database: 'データベースエラー',
     // 認証
     credentialsSignin: 'サインイン認証に失敗しました',
+    // サインアップ
+    signup: 'サインアップに失敗しました',
+    // 存在済み
+    Exist: '既に存在しています',
+    // メールアドレス存在済み
+    EmailIsExist: 'メールアドレスは既に登録されています',
   },
 }

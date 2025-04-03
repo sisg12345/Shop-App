@@ -44,10 +44,7 @@ export const searchProducts = async <T>({
   order && params.append('_order', order)
 
   // リクエストパスを組み立てる
-  const path = buildRequestPath(
-    `${process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_PATH || 'http://localhost:3000'}/products`,
-    params,
-  )
+  const path = buildRequestPath('http://localhost:3000/api/products', params)
 
   // 商品一覧を取得
   return await fetcher(path)

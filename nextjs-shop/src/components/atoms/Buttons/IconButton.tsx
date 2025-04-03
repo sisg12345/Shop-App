@@ -11,6 +11,7 @@ import {
   Close,
   GitHub,
   Person,
+  Logout,
 } from '@mui/icons-material'
 import SvgIcon from '@mui/material/SvgIcon'
 import type { MouseEventHandler } from 'react'
@@ -106,3 +107,5 @@ export const PersonOutlineIcon = withIconStyle(PersonOutline)
 export const GitHubIcon = withIconStyle(GitHub)
 // ショッピングカートアイコン
 export const ShoppingCartIcon = withIconStyle(ShoppingCart)
+// ログアウトアイコン
+export const LogoutIcon = withIconStyle(Logout)

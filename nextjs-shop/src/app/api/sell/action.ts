@@ -3,45 +3,41 @@
 import type { Product, ProductCategory, ProductCondition, ResponseResult } from '@/types'
 import type { FileData } from '@/components/molecules/Images/InputImages'
 import { redirect } from 'next/navigation'
-import { Create } from '@/server/application/product/create/create'
 import { Command } from '@/server/application/product/create/command'
-import { ProductService } from '@/server/domain/services/ProductService'
-import { ProductRepository } from '@/server/infrastructure/repositories/product/ProductRepository'
-import { auth } from '@/lib/auth/auth'
-import { NextResponse } from 'next/server'
-import { DEFAULT_LOGIN_REDIRECT } from '@/lib/auth/routes'
+import { ProductService } from '@/server/domain/services/productService'
+import { ProductRepository } from '@/server/infrastructure/repositories/product/productRepository'
 import authGuard from '@/lib/auth/authGuard'
+import { CreateProductHandler } from '@/server/application/product/create/createProductHandler'
 
-// 商品投稿フォームのデータ
+// 商品出品フォーム
 export type ProductFormData = {
   /** 商品タイトル */
-  title: Product['title']
+  title: string
   /** 商品値段 */
   price: Product['price']
-  // /** 商品画像 */
+  /** 商品画像 */
   images: FileData[]
-  // /** 商品カテゴリー */
+  /** 商品カテゴリー */
   category: ProductCategory
   /** 商品の状態 */
   condition: ProductCondition
   /** 商品説明 */
-  description: Product['description']
+  description: string
 }
 
 /**
  * 商品登録
  *
+ * @param prevState 状態
  * @param formData フォームデータ
  * @returns 処理失敗: エラー返却, 処理成功: ユーザー画面に遷移
  */
-export async function registerProduct(formData: ProductFormData): Promise<ResponseResult> {
+export async function registerProduct(
+  prevState: unknown,
+  formData: ProductFormData,
+): Promise<ResponseResult | void> {
   // 認証ガード
   const session = await authGuard()
-
-  // 認証ガード
-  if (!session) {
-    NextResponse.redirect(DEFAULT_LOGIN_REDIRECT, 401)
-  }
 
   // ユースケースのインプットデータ
   const inputData = new Command(
@@ -55,7 +51,7 @@ export async function registerProduct(formData: ProductFormData): Promise<Respon
   )
 
   // ユースケース実行
-  const { success, message, errors }: ResponseResult = await new Create(
+  const { success, message, errors }: ResponseResult = await new CreateProductHandler(
     inputData,
     new ProductService(),
     new ProductRepository(),
@@ -64,7 +60,7 @@ export async function registerProduct(formData: ProductFormData): Promise<Respon
   // エラーが存在する場合
   if (!success) {
     return {
-      success: false,
+      success,
       message,
       errors,
     }

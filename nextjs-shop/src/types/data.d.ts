@@ -41,12 +41,12 @@ export type Product = {
 export type User = {
   /** ユーザーID */
   id: number
+  /** メールアドレス */
+  email: string
   /** ユーザー名 */
   username: string
   /** ユーザー表示名 */
   displayName: string
-  /** メールアドレス */
-  email: string
   /** プロフィール画像のURL */
   profileImageUrl: string
   /** 説明 */

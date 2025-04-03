@@ -27,7 +27,7 @@ export default function SellPage() {
           {/* 認証されてない */}
           {!session && <Box $color="danger">出品するにはログインしてください</Box>}
           {/* 認証済み */}
-          {session && <ProductForm onProductSave={registerProduct} />}
+          {session && <ProductForm onSave={registerProduct} />}
         </Box>
       </Flex>
     </Flex>

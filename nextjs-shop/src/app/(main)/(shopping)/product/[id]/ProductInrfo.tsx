@@ -10,21 +10,21 @@ import type { Product, User } from '@/types'
 
 type ProductInfoProps = {
   /** タイトル */
-  title: Product['title']
+  title: string
   /** 画像URL */
-  imageUrl: Product['imageUrl']
+  imageUrl: string
   /** 値段 */
   price: Product['price']
   /** 商品説明 */
-  description: Product['description']
+  description: string
   /** オーナー情報 */
   owner: {
     /** ユーザーID */
     id: User['id']
     /** ユーザー名 */
-    username: User['username']
+    username: string
     /** プロフィール画像のURL */
-    profileImageUrl: User['profileImageUrl']
+    profileImageUrl: string
   }
 }
 

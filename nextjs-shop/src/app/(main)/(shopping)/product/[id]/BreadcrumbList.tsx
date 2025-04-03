@@ -6,7 +6,7 @@ type BreadcrumbListProps = {
   /** 商品カテゴリー */
   category: ProductCategory
   /** タイトル */
-  title: Product['title']
+  title: string
 }
 
 /**
